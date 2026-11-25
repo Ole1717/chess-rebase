@@ -1,0 +1,32 @@
+workflows:
+  chess-rebase-android-debug:
+    name: CHESS REBASE - Android APK
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      vars:
+        GRADLE_VERSION: '8.9'
+    scripts:
+      - name: Check build tools
+        script: |
+          set -e
+          java -version
+          gradle --version
+      - name: Generate Gradle wrapper
+        script: |
+          set -e
+          gradle wrapper --gradle-version "$GRADLE_VERSION" --distribution-type bin
+          chmod +x ./gradlew
+      - name: Build debug APK
+        script: |
+          set -e
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          ./gradlew --no-daemon --stacktrace assembleDebug
+    artifacts:
+      - app/build/outputs/apk/debug/*.apk
+      - app/build/outputs/apk/debug/output-metadata.json
+    publishing:
+      email:
+        notify:
+          success: false
+          failure: false
