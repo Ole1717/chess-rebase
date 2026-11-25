@@ -25,8 +25,3 @@ workflows:
     artifacts:
       - app/build/outputs/apk/debug/*.apk
       - app/build/outputs/apk/debug/output-metadata.json
-    publishing:
-      email:
-        notify:
-          success: false
-          failure: false
